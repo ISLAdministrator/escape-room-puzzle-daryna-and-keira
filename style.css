@@ -1,1 +1,52 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
 
+#room-container {
+    background-image: url('start-page.png'); /* Your first image */
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+#lab-error-message {
+    display: none;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    text-align: center;
+    color: red;
+    font-size: 40px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* The Green Liquid Area */
+#science-beaker-click {
+    position: absolute;
+    top: 52%;   
+    left: 67%;  
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 255, 0, 0.5); /* Semi-transparent green */
+    border: 2px solid white;
+    cursor: pointer;
+    z-index: 5;
+}
+
+/* The Puzzle Pieces */
+#lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
+    position: absolute;
+    width: 60px;
+    height: 100px;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+/* Position these roughly - you can adjust these % later */
+#lab-orange-liquid { top: 70%; left: 20%; background-color: orange; }
+#lab-blue-liquid   { top: 70%; left: 40%; background-color: blue; }
+#lab-purple-liquid { top: 70%; left: 60%; background-color: purple; }
