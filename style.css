@@ -27,23 +27,41 @@ body {
   cursor: pointer;
   z-index: 5;
 }
-/* 4. The Three Shades of Green (Stacking Layers) */
+/* 4. The Three Shades of Green (Corrected Positions) */
 #green-shade-1, #green-shade-2, #green-shade-3 {
- position: absolute;
- top: 35%;
- left: 24%;
- width: 1500px;
- height: 1500px;
- background-size: contain;
- background-repeat: no-repeat;
- display: none;
- pointer-events: none;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: none;
+    pointer-events: none;
+    /* We reduced the width so they are easier to handle */
+    width: 600px; 
+    height: 600px;
 }
 
-#green-shade-1 { background-image: url('1shade.png'); z-index: 6; }
-#green-shade-2 { background-image: url('2shade.png'); z-index: 7; }
-#green-shade-3 { background-image: url('lastShade.png'); z-index: 8; }
-/* 5. The Puzzle Bottles (Images + Red Boxes) */
+/* Shade 1 (The beaker on the left in your file) */
+#green-shade-1 { 
+    background-image: url('1shade.png'); 
+    top: 35%; 
+    left: 10%; /* Adjusted to move the 'left' beaker to center */
+    z-index: 6; 
+}
+
+/* Shade 2 (The beaker in the middle of your file) */
+#green-shade-2 { 
+    background-image: url('2shade.png'); 
+    top: 35%; 
+    left: 24%; /* This one stays where it was */
+    z-index: 7; 
+}
+
+/* Shade 3 (The beaker on the right in your file) */
+#green-shade-3 { 
+    background-image: url('lastShade.png'); 
+    top: 35%; 
+    left: 38%; /* Adjusted to move the 'right' beaker to center */
+    z-index: 8; 
+}
 #lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
     position: absolute;
     display: none; 
