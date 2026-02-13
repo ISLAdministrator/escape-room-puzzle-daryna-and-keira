@@ -35,15 +35,15 @@ body {
     display: none;
     pointer-events: none;
     /* We reduced the width so they are easier to handle */
-    width: 600px; 
-    height: 600px;
+    width: 1500px; 
+    height: 1500px;
 }
 
 /* Shade 1 (The beaker on the left in your file) */
 #green-shade-1 { 
     background-image: url('1shade.png'); 
     top: 35%; 
-    left: 10%; /* Adjusted to move the 'left' beaker to center */
+    left: 24%; /* Adjusted to move the 'left' beaker to center */
     z-index: 6; 
 }
 
@@ -51,7 +51,7 @@ body {
 #green-shade-2 { 
     background-image: url('2shade.png'); 
     top: 35%; 
-    left: 24%; /* This one stays where it was */
+    left: 5.5%; /* This one stays where it was */
     z-index: 7; 
 }
 
@@ -59,7 +59,7 @@ body {
 #green-shade-3 { 
     background-image: url('lastShade.png'); 
     top: 35%; 
-    left: 38%; /* Adjusted to move the 'right' beaker to center */
+    left: -13%; /* Adjusted to move the 'right' beaker to center */
     z-index: 8; 
 }
 #lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
@@ -110,4 +110,55 @@ body {
     font-weight: bold;
     text-shadow: 2px 2px 4px #000000;
     z-index: 100;
+}
+
+/* Dark background to focus on the message */
+#final-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Dim the room */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The Paper/Box containing the text */
+#final-modal-content {
+    background: #fdfdfd;
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 650px;
+    width: 85%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,255,0,0.2);
+    font-family: 'Courier New', Courier, monospace; 
+    line-height: 1.6;
+}
+
+#final-modal-content h2 { 
+    color: #2e7d32; 
+    margin-top: 0;
+}
+
+/* Styling the Link to look like a Button */
+#next-level-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 15px 30px;
+    background-color: #2e7d32; 
+    color: white;
+    text-decoration: none; 
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    border: 2px solid #1b5e20;
+}
+
+#next-level-btn:hover {
+    background-color: #1b5e20;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
