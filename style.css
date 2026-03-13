@@ -51,7 +51,7 @@ body {
 #green-shade-2 { 
     background-image: url('2shade.png'); 
     top: 35%; 
-    left: 5.5%; /* This one stays where it was */
+    left: 5%; /* This one stays where it was */
     z-index: 7; 
 }
 
