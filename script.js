@@ -1,164 +1,154 @@
-/* 1. Global Setup */
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden; 
-    font-family: sans-serif;
+// 1. SETUP - Variables and Counters
+let correctClicks = 0;
+let wrongClicks = 0;
+
+// Identify Room and Main Beaker
+const room = document.getElementById('room-container');
+const greenBeaker = document.getElementById('science-beaker-click');
+
+// Identify Audio Elements
+// Using 'new Audio' for the error sound makes it play instantly on every click
+const errorSound = new Audio('error.wav'); 
+const bgMusic = document.getElementById('bg-music');
+
+// Identify the Story Modal and its button
+const finalModal = document.getElementById('final-modal-overlay');
+const nextLevelBtn = document.getElementById('next-level-btn');
+
+// Identify the three shade images (the progress visuals)
+const shade1 = document.getElementById('green-shade-1');
+const shade2 = document.getElementById('green-shade-2');
+const shade3 = document.getElementById('green-shade-3');
+
+// Identify the three puzzle bottles
+const orange = document.getElementById('lab-orange-liquid');
+const blue = document.getElementById('lab-blue-liquid');
+const purple = document.getElementById('lab-purple-liquid');
+
+// 2. THE FIRST CLICK - Entering the Lab and Starting Music
+if (greenBeaker) {
+    greenBeaker.onclick = function() {
+        // Only run this once to enter the lab
+        if (correctClicks === 0 && room.style.backgroundImage !== 'url("2Room.png")') {
+            // Start the background atmosphere music
+            if (bgMusic) {
+                bgMusic.volume = 0.4; // Set to 40% so it's atmospheric
+                bgMusic.play().catch(error => {
+                    console.log("Audio playback was blocked. Click again to enable sound.");
+                });
+            }
+            
+            // Change the room background
+            room.style.backgroundImage = "url('2Room.png')";
+            
+            // Show the puzzle bottles
+            orange.style.display = "block";
+            blue.style.display = "block";
+            purple.style.display = "block";
+            
+            console.log("Lab Entered. Music Started.");
+        }
+    };
 }
 
-/* 2. The Game Stage */
-#room-container {
-    background-image: url('start-page.png');
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    height: 100vh;
-    position: relative; 
+// 3. BOTTLE CLICK LOGIC (The Puzzle Order: Orange -> Blue -> Purple)
+orange.onclick = function() {
+   if (correctClicks === 0) {
+       correctClicks = 1;
+       orange.style.display = "none";
+       shade1.style.display = "block";
+       console.log("Correct: Orange added.");
+   } else {
+       showError();
+   }
+};
+
+blue.onclick = function() {
+   if (correctClicks === 1) {
+       correctClicks = 2;
+       blue.style.display = "none";
+       shade2.style.display = "block";
+       console.log("Correct: Blue added.");
+   } else {
+       showError();
+   }
+};   
+
+purple.onclick = function() {
+   if (correctClicks === 2) {
+       correctClicks = 3;
+       purple.style.display = "none";
+       shade3.style.display = "block";
+       
+       console.log("Puzzle solved!");
+       // Success! Show the custom story modal
+       if (finalModal) {
+           finalModal.style.display = "flex";
+       }
+   } else {
+       showError();
+   }
+};
+
+// 4. THE ERROR FUNCTION (Plays sound and handles mistakes)
+function showError() {
+    const msg = document.getElementById('lab-error-message');
+    
+    // Play the mistake sound (error.wav)
+    if (errorSound) {
+        errorSound.currentTime = 0; // Rewind to start for instant replay
+        errorSound.play().catch(e => console.log("Error sound failed to play."));
+    }
+
+    wrongClicks++; 
+
+    // If they make 2 mistakes, reset the whole lab
+    if (wrongClicks >= 2) {
+        if (msg) {
+            msg.innerText = "TOO MANY MISTAKES! RESTARTING...";
+            msg.style.display = "block";
+        }
+        // Wait 2 seconds then reset the puzzle
+        setTimeout(resetPuzzle, 2000);
+    } else {
+        // First mistake message
+        if (msg) {
+            msg.style.display = "block";
+            setTimeout(() => { msg.style.display = "none"; }, 2000);
+        }
+    }
 }
 
-/* 3. The Green Beaker Area (The first thing they click) */
-#science-beaker-click {
-  position: absolute;
-  top: 52%; 
-  left: 67%;
-  width: 120px;
-  height: 120px;
-  background-color: transparent;
-  cursor: pointer;
-  z-index: 5;
-}
-/* 4. The Three Shades of Green (Corrected Positions) */
-#green-shade-1, #green-shade-2, #green-shade-3 {
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: none;
-    pointer-events: none;
-    /* We reduced the width so they are easier to handle */
-    width: 1500px; 
-    height: 1500px;
-}
-
-/* Shade 1 (The beaker on the left in your file) */
-#green-shade-1 { 
-    background-image: url('1shade.png'); 
-    top: 35%; 
-    left: 24%; /* Adjusted to move the 'left' beaker to center */
-    z-index: 6; 
+// 5. RESET FUNCTION (Clears progress and brings bottles back)
+function resetPuzzle() {
+    correctClicks = 0;
+    wrongClicks = 0;
+    
+    // Hide all progress shades
+    shade1.style.display = "none";
+    shade2.style.display = "none";
+    shade3.style.display = "none";
+    
+    // Bring the bottles back
+    orange.style.display = "block";
+    blue.style.display = "block";
+    purple.style.display = "block";
+    
+    // Hide the error message text
+    const msg = document.getElementById('lab-error-message');
+    if (msg) {
+        msg.style.display = "none";
+        msg.innerText = "WRONG ORDER! TRY AGAIN.";
+    }
+    console.log("Puzzle reset.");
 }
 
-/* Shade 2 (The beaker in the middle of your file) */
-#green-shade-2 { 
-    background-image: url('2shade.png'); 
-    top: 35%; 
-    left: 5%; /* This one stays where it was */
-    z-index: 7; 
-}
-
-/* Shade 3 (The beaker on the right in your file) */
-#green-shade-3 { 
-    background-image: url('lastShade.png'); 
-    top: 35%; 
-    left: -13%; /* Adjusted to move the 'right' beaker to center */
-    z-index: 8; 
-}
-#lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
-    position: absolute;
-    display: none; 
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    cursor: pointer;
-    z-index: 10;
-    /* Red box for the bottles so you can see the hitboxes */
-    border: 2px solid red; 
-}
-
-#lab-orange-liquid { 
-    top: 80%; 
-    left: 65%; 
-    width: 60px; 
-    height: 100px; 
-    background-image: url('orange.png'); 
-}
-
-#lab-blue-liquid { 
-    top: 70%; 
-    left: 27%; 
-    width: 100px; 
-    height: 60px; 
-    background-image: url('blue.png'); 
-}
-
-#lab-purple-liquid { 
-    top: 1%; 
-    left: 52%; 
-    width: 80px; 
-    height: 50px; 
-    background-image: url('purple.png'); 
-}
-
-/* 6. Feedback UI */
-#lab-error-message {
-    display: none;
-    position: absolute;
-    top: 10%;
-    width: 100%;
-    text-align: center;
-    color: #ff0000;
-    font-size: 32px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px #000000;
-    z-index: 100;
-}
-
-/* Dark background to focus on the message */
-#final-modal-overlay {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Dim the room */
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-/* The Paper/Box containing the text */
-#final-modal-content {
-    background: #fdfdfd;
-    padding: 40px;
-    border-radius: 12px;
-    max-width: 650px;
-    width: 85%;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0,255,0,0.2);
-    font-family: 'Courier New', Courier, monospace; 
-    line-height: 1.6;
-}
-
-#final-modal-content h2 { 
-    color: #2e7d32; 
-    margin-top: 0;
-}
-
-/* Styling the Link to look like a Button */
-#next-level-btn {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 15px 30px;
-    background-color: #2e7d32; 
-    color: white;
-    text-decoration: none; 
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-    border: 2px solid #1b5e20;
-}
-
-#next-level-btn:hover {
-    background-color: #1b5e20;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+// 6. EXIT LOGIC - Stopping music when leaving
+if (nextLevelBtn) {
+    nextLevelBtn.onclick = function() {
+        console.log("Leaving Lab. Stopping background music.");
+        if (bgMusic) {
+            bgMusic.pause();
+        }
+    };
 }
