@@ -1,31 +1,49 @@
-<!--This is an HTML Comment, text just for humans :) It is not part of your code.
-Good coders use comments frequently to stay organized and communicate with collaborators.
-
-The code below is basic HTML for your puzzle.
-You can edit it, add to it, and delete parts of it.
-
-DO NOT let AI code for you!!
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Escape Room</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>ISL Escape Room</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Escape Room</h1>
+<div id="room-container">
+    <p id="lab-error-message">WRONG ORDER! TRY AGAIN.</p>
 
-  <p>
-    Write the story of your escape room here.
-  </p>
+   <div id="science-beaker-click"></div>
+  
+   <div id="green-shade-1"></div>
+   <div id="green-shade-2"></div>
+   <div id="green-shade-3"></div>
 
-  <button id="button">Click me</button>
-
-  <p id="output"></p>
-
-  <script src="script.js"></script>
+    <div id="lab-orange-liquid"></div>
+    <div id="lab-blue-liquid"></div>
+    <div id="lab-purple-liquid"></div>
+</div>
+    
+<div id="final-modal-overlay">
+    <div id="final-modal-content">
+        <h2>SUCCESS!</h2>
+        <p id="final-story-text">
+            As you put in the final ingredient the bottle begins to smoke, dark green gas shooting out of it. 
+            You quickly run back to avoid breathing it in. You keep looking at the bottle from in between 
+            your fingers when you see the green is no longer there. There is no liquid in fact…did we mess 
+            it up? You ask yourself until you see the piece of paper folded neatly at the bottom of the flask. 
+            You pick it up and it reads in bold lettering:<br><br>
+            <strong>TASK COMPLETE - SUBSTANCE STABILIZED. CONCLUSION - HARMLESS. HEAD TO 301 DESIGN ROOM.</strong>
+            <br><br>
+            Under the text is one symbol: <strong>!</strong>. Could this be important later? 
+            Knowing your journey is almost at its end you quickly exit the room and dash down the stairs.
+        </p>
+        
+        <a href="https://isladministrator.github.io/escape-room-puzzle-nika-karlina-1/" id="next-level-btn">CONTINUE TO ROOM 301</a>
+    </div>
+</div>
+    <script src="script.js"></script>
+    <audio id="error-sound" src="error.wav"></audio>
 </body>
 </html>
+
+<audio id="bg-music" src="background.wav" loop></audio>
+<audio id="error-sound" src="error.wav"></audio>
+
