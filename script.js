@@ -1,144 +1,164 @@
-// 1. SETUP - Identify all elements
-let correctClicks = 0;
-
-const room = document.getElementById('room-container');
-const greenBeaker = document.getElementById('science-beaker-click');
-
-// The three shade images
-const shade1 = document.getElementById('green-shade-1');
-const shade2 = document.getElementById('green-shade-2');
-const shade3 = document.getElementById('green-shade-3');
-
-// The three puzzle bottles
-const orange = document.getElementById('lab-orange-liquid');
-const blue = document.getElementById('lab-blue-liquid');
-const purple = document.getElementById('lab-purple-liquid');
-
-// 2. THE FIRST CLICK - Transition to the Lab
-greenBeaker.onclick = function() {
-    // Only works at the very start (correctClicks is 0)
-    if (correctClicks === 0 && room.style.backgroundImage !== 'url("2Room.png")') {
-        room.style.backgroundImage = "url('2Room.png')";
-        
-        // Show the puzzle bottles
-        orange.style.display = "block";
-        blue.style.display = "block";
-        purple.style.display = "block";
-        
-        console.log("Welcome to the Lab! Follow the order: Orange, Blue, Purple.");
-    }
-};
-
-// 3. ORANGE CLICK (Step 1)
-orange.onclick = function() {
-   if (correctClicks === 0) {
-       correctClicks = 1;
-       orange.style.display = "none"; // Hide bottle
-       shade1.style.display = "block"; // Show first shade
-       console.log("Correct! Shade 1 active.");
-   } else {
-       showError();
-   }
-};
-
-
-// 4. BLUE CLICK (Step 2)
-blue.onclick = function() {
-   if (correctClicks === 1) {
-       correctClicks = 2;
-       blue.style.display = "none"; // Hide bottle
-       shade2.style.display = "block"; // Show second shade on top
-       console.log("Correct! Shade 2 active.");
-   } else {
-       showError();
-   }
-};   
-// 5. PURPLE CLICK (Step 3 - Final)
-purple.onclick = function() {
-   if (correctClicks === 2) {
-       correctClicks = 3;
-       purple.style.display = "none"; // Hide bottle
-       shade3.style.display = "block"; // Show last shade on top
-      
-       console.log("Puzzle solved!");
-       alert("The experiment is a success! You created the antidote!");
-   } else {
-       showError();
-   }
-};
-
-
-// 6. ERROR MESSAGE FUNCTION
-function showError() {
-    const msg = document.getElementById('lab-error-message');
-    if (msg) {
-        msg.style.display = "block";
-        setTimeout(() => {
-            msg.style.display = "none";
-        }, 2000);
-    }
+/* 1. Global Setup */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+    font-family: sans-serif;
 }
 
-// 1. New variable to track mistakes
-let wrongClicks = 0;
-
-// ... (keep your existing variables) ...
-
-// 6. UPDATED ERROR MESSAGE & RESET FUNCTION
-function showError() {
-    const msg = document.getElementById('lab-error-message');
-    wrongClicks++; // Add 1 to the mistake counter
-
-    if (wrongClicks >= 1) {
-        // RESET THE PUZZLE
-        msg.innerText = "TOO MANY MISTAKES! RESTARTING...";
-        msg.style.display = "block";
-
-        setTimeout(() => {
-            // 1. Reset counters
-            correctClicks = 0;
-            wrongClicks = 0;
-
-            // 2. Hide all the green shades
-            shade1.style.display = "none";
-            shade2.style.display = "none";
-            shade3.style.display = "none";
-
-            // 3. Bring the colored bottles back
-            orange.style.display = "block";
-            blue.style.display = "block";
-            purple.style.display = "block";
-
-            // 4. Hide the message
-            msg.style.display = "none";
-            msg.innerText = "WRONG ORDER! TRY AGAIN."; // Reset text for next time
-            
-            console.log("Puzzle reset due to mistakes.");
-        }, 2000);
-    } else {
-        // Regular error (first mistake)
-        msg.style.display = "block";
-        setTimeout(() => {
-            msg.style.display = "none";
-        }, 2000);
-    }
+/* 2. The Game Stage */
+#room-container {
+    background-image: url('start-page.png');
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative; 
 }
 
-// At the top with your other variables
-const finalModal = document.getElementById('final-modal-overlay');
+/* 3. The Green Beaker Area (The first thing they click) */
+#science-beaker-click {
+  position: absolute;
+  top: 52%; 
+  left: 67%;
+  width: 120px;
+  height: 120px;
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 5;
+}
+/* 4. The Three Shades of Green (Corrected Positions) */
+#green-shade-1, #green-shade-2, #green-shade-3 {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: none;
+    pointer-events: none;
+    /* We reduced the width so they are easier to handle */
+    width: 1500px; 
+    height: 1500px;
+}
 
-// Update your purple.onclick function:
-purple.onclick = function() {
-   if (correctClicks === 2) {
-       correctClicks = 3;
-       purple.style.display = "none";
-       shade3.style.display = "block";
-      
-       console.log("Puzzle solved!");
-       
-       // Show the custom story modal
-       finalModal.style.display = "flex"; 
-   } else {
-       showError();
-   }
-};
+/* Shade 1 (The beaker on the left in your file) */
+#green-shade-1 { 
+    background-image: url('1shade.png'); 
+    top: 35%; 
+    left: 24%; /* Adjusted to move the 'left' beaker to center */
+    z-index: 6; 
+}
+
+/* Shade 2 (The beaker in the middle of your file) */
+#green-shade-2 { 
+    background-image: url('2shade.png'); 
+    top: 35%; 
+    left: 5%; /* This one stays where it was */
+    z-index: 7; 
+}
+
+/* Shade 3 (The beaker on the right in your file) */
+#green-shade-3 { 
+    background-image: url('lastShade.png'); 
+    top: 35%; 
+    left: -13%; /* Adjusted to move the 'right' beaker to center */
+    z-index: 8; 
+}
+#lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
+    position: absolute;
+    display: none; 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 10;
+    /* Red box for the bottles so you can see the hitboxes */
+    border: 2px solid red; 
+}
+
+#lab-orange-liquid { 
+    top: 80%; 
+    left: 65%; 
+    width: 60px; 
+    height: 100px; 
+    background-image: url('orange.png'); 
+}
+
+#lab-blue-liquid { 
+    top: 70%; 
+    left: 27%; 
+    width: 100px; 
+    height: 60px; 
+    background-image: url('blue.png'); 
+}
+
+#lab-purple-liquid { 
+    top: 1%; 
+    left: 52%; 
+    width: 80px; 
+    height: 50px; 
+    background-image: url('purple.png'); 
+}
+
+/* 6. Feedback UI */
+#lab-error-message {
+    display: none;
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
+    color: #ff0000;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    z-index: 100;
+}
+
+/* Dark background to focus on the message */
+#final-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Dim the room */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The Paper/Box containing the text */
+#final-modal-content {
+    background: #fdfdfd;
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 650px;
+    width: 85%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,255,0,0.2);
+    font-family: 'Courier New', Courier, monospace; 
+    line-height: 1.6;
+}
+
+#final-modal-content h2 { 
+    color: #2e7d32; 
+    margin-top: 0;
+}
+
+/* Styling the Link to look like a Button */
+#next-level-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 15px 30px;
+    background-color: #2e7d32; 
+    color: white;
+    text-decoration: none; 
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    border: 2px solid #1b5e20;
+}
+
+#next-level-btn:hover {
+    background-color: #1b5e20;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
