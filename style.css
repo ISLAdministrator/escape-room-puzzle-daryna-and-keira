@@ -9,7 +9,7 @@ body {
 /* 2. The Game Stage */
 #room-container {
     background-image: url('start-page.png');
-    background-size: containe;
+    background-size: contain;
     background-position: center;
     width: 100vw;
     height: 100vh;
