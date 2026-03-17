@@ -68,14 +68,14 @@ body {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    width: 6%; 
-    height: 10%;
+    width: 100%; 
+    height: 100%;
     display: none;
     z-index: 10;
 }
 
 /* Placements based on percentage of the room container */
-#lab-orange-liquid { top: 68%; left: 32%; background-image: url('orange.png'); }
+#lab-orange-liquid { top: 29%; left: 13%; background-image: url('orange.png'); }
 #lab-blue-liquid { top: 68%; left: 38%; background-image: url('blue.png'); }
 #lab-purple-liquid { top: 68%; left: 44%; background-image: url('purple.png'); }
 
