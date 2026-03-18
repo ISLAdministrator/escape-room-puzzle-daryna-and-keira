@@ -1,26 +1,22 @@
-// 1. SETUP - Variables and Counters
 let correctClicks = 0;
 let wrongClicks = 0;
 
-// Identify Room and Main Beaker
+// Identify Room and Main Elements
 const room = document.getElementById('room-container');
 const greenBeaker = document.getElementById('science-beaker-click');
+const finalModal = document.getElementById('final-modal-overlay');
 
-// Identify Audio Elements
-// Using 'new Audio' for the error sound makes it play instantly on every click
+// Identify Audio Elements from your HTML
 const errorSound = new Audio('error.wav'); 
 const bgMusic = document.getElementById('bg-music');
-
-// Identify the Story Modal and its button
-const finalModal = document.getElementById('final-modal-overlay');
-const nextLevelBtn = document.getElementById('next-level-btn');
+const successSound = document.getElementById('success-sound');
 
 // Identify the three shade images (the progress visuals)
 const shade1 = document.getElementById('green-shade-1');
 const shade2 = document.getElementById('green-shade-2');
 const shade3 = document.getElementById('green-shade-3');
 
-// Identify the three puzzle bottles
+// Identify the three puzzle bottles (Hitboxes)
 const orange = document.getElementById('lab-orange-liquid');
 const blue = document.getElementById('lab-blue-liquid');
 const purple = document.getElementById('lab-purple-liquid');
@@ -28,90 +24,66 @@ const purple = document.getElementById('lab-purple-liquid');
 // 2. THE FIRST CLICK - Entering the Lab and Starting Music
 if (greenBeaker) {
     greenBeaker.onclick = function() {
-        // Only run this once to enter the lab
         if (correctClicks === 0 && room.style.backgroundImage !== 'url("2Room.png")') {
             // Start the background atmosphere music
             if (bgMusic) {
-                bgMusic.volume = 0.4; // Set to 40% so it's atmospheric
-                bgMusic.play().catch(error => {
-                    console.log("Audio playback was blocked. Click again to enable sound.");
-                });
+                bgMusic.volume = 0.4; 
+                bgMusic.play().catch(e => console.log("Music blocked by browser until next click."));
             }
-            
-            // Change the room background
             room.style.backgroundImage = "url('2Room.png')";
-            
-            // Show the puzzle bottles
             orange.style.display = "block";
             blue.style.display = "block";
             purple.style.display = "block";
-            
-            console.log("Lab Entered. Music Started.");
         }
     };
 }
 
-// 3. BOTTLE CLICK LOGIC (The Puzzle Order: Orange -> Blue -> Purple)
-orange.onclick = function() {
-   if (correctClicks === 0) {
-       correctClicks = 1;
-       orange.style.display = "none";
-       shade1.style.display = "block";
-       console.log("Correct: Orange added.");
-   } else {
-       showError();
-   }
-};
+// 3. PUZZLE LOGIC - Checking the Sequence
+orange.onclick = function() { handleBottleClick(1, orange, shade1); };
+blue.onclick = function() { handleBottleClick(2, blue, shade2); };
+purple.onclick = function() { handleBottleClick(3, purple, shade3); };
 
-blue.onclick = function() {
-   if (correctClicks === 1) {
-       correctClicks = 2;
-       blue.style.display = "none";
-       shade2.style.display = "block";
-       console.log("Correct: Blue added.");
-   } else {
-       showError();
-   }
-};   
+function handleBottleClick(order, bottleElement, shadeElement) {
+    if (correctClicks + 1 === order) {
+        correctClicks++;
+        bottleElement.style.display = "none"; 
+        shadeElement.style.display = "block"; 
+        checkSuccess();
+    } else {
+        handleError();
+    }
+}
 
-purple.onclick = function() {
-   if (correctClicks === 2) {
-       correctClicks = 3;
-       purple.style.display = "none";
-       shade3.style.display = "block";
-       
-       console.log("Puzzle solved!");
-       // Success! Show the custom story modal
-       if (finalModal) {
-           finalModal.style.display = "flex";
-       }
-   } else {
-       showError();
-   }
-};
+function checkSuccess() {
+    if (correctClicks === 3) {
+        // --- NEW CHANGE ---
+        // Play the success sound!
+        if (successSound) {
+            successSound.play().catch(e => console.log("Success sound failed."));
+        }
+        
+        // Show the final message after a tiny delay
+        setTimeout(() => {
+            finalModal.style.display = "flex";
+        }, 500);
+    }
+}
 
-// 4. THE ERROR FUNCTION (Plays sound and handles mistakes)
-function showError() {
+function handleError() {
     const msg = document.getElementById('lab-error-message');
-    
-    // Play the mistake sound (error.wav)
     if (errorSound) {
-        errorSound.currentTime = 0; // Rewind to start for instant replay
-        errorSound.play().catch(e => console.log("Error sound failed to play."));
+        errorSound.play().catch(e => console.log("Error sound failed."));
     }
 
     wrongClicks++; 
 
-    // If they make 2 mistakes, reset the whole lab
     if (wrongClicks >= 2) {
         if (msg) {
             msg.innerText = "TOO MANY MISTAKES! RESTARTING...";
             msg.style.display = "block";
         }
-        // Wait 2 seconds then reset the puzzle
         setTimeout(resetPuzzle, 2000);
     } else {
-        // First mistake message
         if (msg) {
             msg.style.display = "block";
             setTimeout(() => { msg.style.display = "none"; }, 2000);
@@ -119,36 +91,18 @@ function showError() {
     }
 }
 
-// 5. RESET FUNCTION (Clears progress and brings bottles back)
 function resetPuzzle() {
     correctClicks = 0;
     wrongClicks = 0;
-    
-    // Hide all progress shades
     shade1.style.display = "none";
     shade2.style.display = "none";
     shade3.style.display = "none";
-    
-    // Bring the bottles back
     orange.style.display = "block";
     blue.style.display = "block";
     purple.style.display = "block";
-    
-    // Hide the error message text
     const msg = document.getElementById('lab-error-message');
     if (msg) {
         msg.style.display = "none";
         msg.innerText = "WRONG ORDER! TRY AGAIN.";
     }
-    console.log("Puzzle reset.");
-}
-
-// 6. EXIT LOGIC - Stopping music when leaving
-if (nextLevelBtn) {
-    nextLevelBtn.onclick = function() {
-        console.log("Leaving Lab. Stopping background music.");
-        if (bgMusic) {
-            bgMusic.pause();
-        }
-    };
 }
