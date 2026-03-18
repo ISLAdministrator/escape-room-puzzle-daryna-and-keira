@@ -87,8 +87,7 @@ body {
 #lab-orange-liquid, #lab-blue-liquid, #lab-purple-liquid {
     position: absolute;
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent for testing */
-    border: 2px solid yellow; /* Visible border for testing */
+    border: 2px solid rgb(250, 250, 164); /* Visible border for testing */
     display: none;
     z-index: 10;
 }
